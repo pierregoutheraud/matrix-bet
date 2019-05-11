@@ -1,0 +1,16 @@
+.container {
+}
+
+.matrix {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.buttons {
+  margin-top: 20px;
+}
+
+.buttons button {
+  margin-right: 10px;
+}
