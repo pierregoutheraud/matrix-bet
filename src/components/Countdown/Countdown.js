@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import useInterval from "../../hooks/useInterval";
 import cx from "classnames";
 import styles from "./Countdown.module.css";

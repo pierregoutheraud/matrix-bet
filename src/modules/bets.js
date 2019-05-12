@@ -4,26 +4,26 @@ const PLACE_BETS = "PLACE_BETS";
 const CLEAN_BETS = "CLEAN_BETS";
 const END_BETS = "END_BETS";
 
-export function endBets(matrixId) {
+export function endBets(gameId) {
   return {
     type: END_BETS,
-    matrixId,
+    gameId,
   };
 }
 
-export function cleanBets(matrixId) {
+export function cleanBets(gameId) {
   return {
     type: CLEAN_BETS,
-    matrixId,
+    gameId,
   };
 }
 
-export function bet(matrixId, betId, active, price, x, y) {
+export function bet(gameId, betId, active, price, x, y) {
   return {
     type: active ? BET : UNBET,
     bet: {
       id: betId,
-      matrixId,
+      gameId,
       price,
       x,
       y,
@@ -31,10 +31,10 @@ export function bet(matrixId, betId, active, price, x, y) {
   };
 }
 
-export function placeBets(matrixId) {
+export function placeBets(gameId) {
   return {
     type: PLACE_BETS,
-    matrixId,
+    gameId,
   };
 }
 
@@ -45,34 +45,34 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
-  const { type, bet, matrixId } = action;
+  const { type, bet, gameId } = action;
   switch (type) {
     case END_BETS:
       return {
         ...state,
-        list: state.list.filter(b => b.matrixId !== matrixId),
-        placed: state.placed.filter(b => b.matrixId !== matrixId),
+        list: state.list.filter(b => b.gameId !== gameId),
+        placed: state.placed.filter(b => b.gameId !== gameId),
       };
     case PLACE_BETS:
       return {
         ...state,
-        list: state.list.filter(b => b.matrixId !== matrixId),
+        list: state.list.filter(b => b.gameId !== gameId),
         placed: [
           ...state.placed,
-          ...state.list.filter(b => b.matrixId === matrixId),
+          ...state.list.filter(b => b.gameId === gameId),
         ],
       };
     case CLEAN_BETS:
       return {
         ...state,
-        list: state.list.filter(b => b.matrixId !== matrixId),
+        list: state.list.filter(b => b.gameId !== gameId),
       };
     case UNBET:
       return {
         ...state,
         balance: state.balance + bet.price,
         list: state.list.filter(b => {
-          if (b.id === bet.id && b.x === bet.x && b.y === bet.y) {
+          if (b.id === bet.id) {
             return false;
           }
           return true;

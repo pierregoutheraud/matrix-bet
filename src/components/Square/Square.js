@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import cx from "classnames";
 import styles from "./Square.module.css";
 
@@ -12,8 +12,6 @@ export default function Square({
   y,
   onClick = () => {},
 }) {
-  const [color] = useState("red");
-
   function handleClick() {
     const newActive = !active;
     onClick(id, newActive, price, x, y);
