@@ -11,12 +11,19 @@ export default function Home() {
         <Game
           className={styles.matrix}
           id="1"
-          width={10}
-          height={10}
-          price={0.1}
-          edge={0.1}
+          width={100}
+          height={100}
+          price={5}
+          edge={0.5}
+          userBets={[
+            { id: "1_1_1" },
+            { id: "1_3_4" },
+            { id: "1_7_5" },
+            { id: "1_2_9" },
+          ]}
+          // userBets={[]}
           result={{
-            winningBet: `1_1_1`,
+            winningBet: "1_1_1",
           }}
           endTime={Date.now() + 500 * 1000}
         />

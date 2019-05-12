@@ -5,6 +5,7 @@ import { bet, cleanBets, placeBets, endBets } from "../../modules/bets";
 import Countdown from "../Countdown/Countdown";
 import Matrix from "../Matrix/Matrix";
 import styles from "./Game.module.css";
+import { SQUARE_STATUS } from "../Square/Square";
 
 export default function Game({
   id,
@@ -14,6 +15,7 @@ export default function Game({
   endTime,
   edge,
   price = 1,
+  userBets,
 }) {
   const dispatch = useDispatch();
   const bets = useSelector(
@@ -29,11 +31,14 @@ export default function Game({
     [id]
   );
 
-  function handleBet(betId, active, price, x, y) {
-    if (placedBets.some(b => b.id === betId)) {
-      return window.alert("Already placed bet.");
+  function handleBet(betId, status, price) {
+    if (status === SQUARE_STATUS.PLACED) {
+      return window.alert("You already placed a bet here.");
     }
-    return dispatch(bet(id, betId, active, price, x, y));
+    if (status === SQUARE_STATUS.TAKEN) {
+      return window.alert("This position has been taken by another user.");
+    }
+    return dispatch(bet(id, betId, status, price));
   }
 
   function handleCleanBets() {
@@ -50,12 +55,17 @@ export default function Game({
   }
 
   const numberOfPossibleBets = width * height;
-  const numberOfbets = bets.length + placedBets.length;
-  const maxProfitAmount = numberOfPossibleBets * price;
+  const numberOfMybets = bets.length + placedBets.length;
+  const numberOfbets = [bets, placedBets, userBets].reduce(
+    (acc, curr) => acc + curr.length,
+    0
+  );
+  const maxPossibleProfitAmount = numberOfPossibleBets * price;
+  const maxProfitAmount = numberOfbets * price;
   const edgeAmount = (edge / 100) * maxProfitAmount;
   const profitAmount = maxProfitAmount - edgeAmount;
-  const betAmount = numberOfbets * price;
-  const percentage = (numberOfbets * 100) / numberOfPossibleBets;
+  const betAmount = numberOfMybets * price;
+  const winChance = (numberOfMybets * 100) / numberOfbets;
   const payout = profitAmount / betAmount;
 
   return (
@@ -67,13 +77,15 @@ export default function Game({
         height={height}
         bets={bets}
         placedBets={placedBets}
+        userBets={userBets}
         squarePrice={price}
         onBet={handleBet}
       />
       <div className={styles.stats}>
+        <p>Max possible profit: {maxPossibleProfitAmount}$</p>
         <p>Bet amount: {betAmount}$</p>
         <p>Payout: x{payout}</p>
-        <p>Win chance: {percentage}%</p>
+        <p>Win chance: {winChance}%</p>
         <p>Profit on win: {profitAmount}$</p>
       </div>
       <div className={styles.buttons}>

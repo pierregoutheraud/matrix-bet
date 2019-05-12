@@ -1,3 +1,5 @@
+import { SQUARE_STATUS } from "../components/Square/Square";
+
 const BET = "BET";
 const UNBET = "UNBET";
 const PLACE_BETS = "PLACE_BETS";
@@ -18,15 +20,13 @@ export function cleanBets(gameId) {
   };
 }
 
-export function bet(gameId, betId, active, price, x, y) {
+export function bet(gameId, betId, status, price) {
   return {
-    type: active ? BET : UNBET,
+    type: status === SQUARE_STATUS.BLANK ? BET : UNBET,
     bet: {
       id: betId,
       gameId,
       price,
-      x,
-      y,
     },
   };
 }
