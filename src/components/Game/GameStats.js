@@ -50,11 +50,13 @@ export default function GameStats({
 
   return (
     <div className={styles.stats}>
-      <p>Max possible profit: {maxPossibleProfitAmount}$</p>
-      <p>Bet amount: {betAmount}$</p>
-      <p>Payout: x{payout}</p>
-      <p>Win chance: {winChance}%</p>
-      <p>Profit on win: {profitAmount}$</p>
+      <div className={styles.details}>
+        <p>Max possible profit: {maxPossibleProfitAmount}$</p>
+        <p>Bet amount: {betAmount}$</p>
+        <p>Payout: x{payout}</p>
+        <p>Win chance: {winChance}%</p>
+        <p>Profit on win: {profitAmount}$</p>
+      </div>
       <div className={styles.buttons}>
         <button disabled={!!!bets.length} onClick={handleConfirmBets}>
           Confirm bets

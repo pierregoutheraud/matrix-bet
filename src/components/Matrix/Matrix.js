@@ -6,8 +6,6 @@ export default function Matrix({
   gameId,
   width,
   height,
-  bets,
-  placedBets,
   userBets,
   borderSize = 2,
   squareSize = 20,

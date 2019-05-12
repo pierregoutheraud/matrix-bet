@@ -11,9 +11,9 @@ export default function Home() {
         <Game
           className={styles.matrix}
           id="1"
-          width={100}
-          height={100}
-          price={5}
+          width={20}
+          height={20}
+          price={1}
           edge={0.5}
           userBets={[
             { id: "1_1_1" },
