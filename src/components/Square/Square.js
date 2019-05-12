@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import cx from "classnames";
 import styles from "./Square.module.css";
 
@@ -9,36 +10,38 @@ export const SQUARE_STATUS = {
   TAKEN: "TAKEN",
 };
 
-export default function Square({
-  id,
-  active,
-  placed,
-  size,
-  price,
-  x,
-  y,
-  status,
-  onClick = () => {},
-}) {
-  const [_status, setStatus] = useState(null);
+function Square({ id, size, price, x, y, userBets, onClick = () => {} }) {
+  const isActive = useSelector(
+    state => {
+      return state.bets.list.some(b => b.id === id);
+    },
+    [id]
+  );
 
-  useEffect(() => {
-    setStatus(status);
-  }, [status]);
+  const isPlaced = useSelector(
+    state => {
+      return state.bets.placed.some(b => b.id === id);
+    },
+    [id]
+  );
+
+  function getStatus() {
+    if (userBets.some(b => b.id === id)) {
+      return SQUARE_STATUS.TAKEN;
+    }
+    if (isPlaced) {
+      return SQUARE_STATUS.PLACED;
+    }
+    if (isActive) {
+      return SQUARE_STATUS.ACTIVE;
+    }
+    return SQUARE_STATUS.BLANK;
+  }
+
+  const status = getStatus();
 
   function handleClick() {
-    // switch (_status) {
-    //   case SQUARE_STATUS.BLANK:
-    //     setStatus(SQUARE_STATUS.ACTIVE);
-    //     break;
-    //   case SQUARE_STATUS.ACTIVE:
-    //     setStatus(SQUARE_STATUS.BLANK);
-    //     break;
-    //   default:
-    // }
-    // setTimeout(() => {
     onClick(id, status, price, x, y);
-    // }, 0);
   }
 
   function getColor(s) {
@@ -59,7 +62,7 @@ export default function Square({
   const style = {
     height: size,
     width: size,
-    background: getColor(_status),
+    background: getColor(status),
   };
 
   return (
@@ -70,3 +73,5 @@ export default function Square({
     />
   );
 }
+
+export default React.memo(Square);
